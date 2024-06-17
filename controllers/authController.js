@@ -6,10 +6,10 @@ const {
 } = require("../models/userModel");
 
 const register = async (req, res) => {
-  const { username, password, employeeNumber } = req.body;
+  const { username, password, employeeId } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await createUser(username, hashedPassword, employeeNumber);
+    const user = await createUser(username, hashedPassword, employeeId);
     res.status(201).json({
       message: "Usuario registrado con éxito",
       id: user.id,
