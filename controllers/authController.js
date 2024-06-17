@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const {
   createUser,
-  findUserById,
   findUserByUsername,
 } = require("../models/userModel");
 
@@ -17,13 +16,13 @@ const register = async (req, res) => {
       usuario: user.usuario,
     });
   } catch (err) {
-    req
+    res
       .status(500)
       .json({ message: "Error al registrar usuario", error: err.message });
   }
 };
 
-const login = async (res, req) => {
+const login = async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await findUserByUsername(username);
@@ -41,7 +40,7 @@ const login = async (res, req) => {
     });
     res.status(200).json({ token });
   } catch (err) {
-    req
+    res
       .status(500)
       .json({ message: "Error al iniciar sesión", error: err.message });
   }
