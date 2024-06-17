@@ -7,9 +7,9 @@ const createUser = async (username, hash, employeeNumber) => {
     const pool = await poolPromise;
     const result = await pool
       .request()
-      .input("username", sql.NVarChar, username)
-      .input("hash", sql.NVarChar, hash)
-      .input("employeeNumber", sql.Int, employeeNumber)
+      .input("usuario", sql.NVarChar, username)
+      .input("clave_hash", sql.NVarChar, hash)
+      .input("id_personal", sql.Int, employeeNumber)
       .query(
         "EXECUTE [seguridad].[registrar_nuevo_usuario] @usuario, @clave_hash, @id_personal"
       );
@@ -37,7 +37,7 @@ const findUserByUsername = async (username) => {
     const pool = await poolPromise;
     const result = await pool
       .request()
-      .input("username", sql.Int, username)
+      .input("usuario", sql.Int, username)
       .query("EXECUTE [seguridad].[get_user_data_by_usuario] @usuario");
     return result.recordset[0];
   } catch (err) {
