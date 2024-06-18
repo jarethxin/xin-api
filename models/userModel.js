@@ -37,7 +37,7 @@ const findUserByUsername = async (username) => {
     const pool = await poolPromise;
     const result = await pool
       .request()
-      .input("usuario", sql.Int, username)
+      .input("usuario", sql.VarChar, username)
       .query("EXECUTE [seguridad].[get_user_data_by_usuario] @usuario");
     return result.recordset[0];
   } catch (err) {
