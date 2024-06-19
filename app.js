@@ -16,7 +16,7 @@ app.get("api/protected", authMiddleware, (req, res) => {
   res.status(200).json({ message: "Acceso a ruta protegida concedido" });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 51810;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
