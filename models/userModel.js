@@ -45,8 +45,25 @@ const findUserByUsername = async (username) => {
   }
 };
 
+const updatePasswordInDatabase = async (userId, hashedNewPassword) => {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("userId", sql.Int, userId)
+      .input("nueva_clave_hash", sql.NVarChar, hashedNewPassword)
+      .query(
+        "EXECUTE [seguridad].[actualizar_clave_hash] @userId, @nueva_clave_hash"
+      );
+    return result.rowsAffected[0] > 0;
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
     createUser,
     findUserById,
-    findUserByUsername
+    findUserByUsername,
+    updatePasswordInDatabase,
 }

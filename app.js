@@ -3,10 +3,15 @@ const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const authRoutes = require("./routes/authRoutes");
 const authMiddleware = require("./middlewares/authMiddleware");
+const cors = require('cors');
+
 
 dotenv.config();
 
 const app = express();
+
+app.use(cors());
+
 app.use(bodyParser.json());
 
 app.use("/api/auth", authRoutes);
