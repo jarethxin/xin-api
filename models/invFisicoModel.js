@@ -7,7 +7,7 @@ const getAndenesList = async (terminal_id) => {
         .request()
         .input("terminal_id", sql.Int, terminal_id)
         .query("EXECUTE [control_equipo].[sp_get_andenes_list] @terminal_id");
-      return result.recordset[0];
+      return result.recordset;
     } catch (err) {
       throw err;
     }
@@ -25,7 +25,7 @@ const getAndenesList = async (terminal_id) => {
         .query(
           "EXECUTE [control_equipo].[sp_ins_inventario_general] @empresa_id, @terminal_id, @observaciones, @creado_por"
         );
-      return result.recordset[0];
+      return result.recordset;
     } catch (err) {
       throw err;
     }
@@ -50,7 +50,7 @@ const getAndenesList = async (terminal_id) => {
         .query(
           "EXECUTE [control_equipo].[sp_ins_inventario_detalle] @inventario_id, @captura_manual, @linea_transportista_id, @linea_transportista, @tipo_unidad_id, @unidad_id, @identificador, @anden_id, @cargado, @creado_por, @estatus_id"
         );
-      return result.recordset[0];
+      return result.recordset;
     } catch (err) {
       throw err;
     }

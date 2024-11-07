@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const authRoutes = require("./routes/authRoutes");
+const invFisicoRoutes = require("./routes/invFisicoRoutes");
 const authMiddleware = require("./middlewares/authMiddleware");
 const cors = require('cors');
 
@@ -15,6 +16,8 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use("/api/auth", authRoutes);
+
+app.use("/api/inv-fisico", authMiddleware, invFisicoRoutes);
 
 // ejemplo de ruta protegida
 app.get("api/protected", authMiddleware, (req, res) => {
