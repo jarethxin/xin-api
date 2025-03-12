@@ -15,14 +15,9 @@ app.use(cors());
 
 app.use(bodyParser.json());
 
-app.use("/api/auth", authRoutes);
+app.use("/api/v1/auth", authRoutes);
 
-app.use("/api/inv-fisico", authMiddleware, invFisicoRoutes);
-
-// ejemplo de ruta protegida
-app.get("api/protected", authMiddleware, (req, res) => {
-  res.status(200).json({ message: "Acceso a ruta protegida concedido" });
-});
+app.use("/api/v1/inventario", authMiddleware, invFisicoRoutes);
 
 const PORT = process.env.PORT || 51810;
 app.listen(PORT, () => {
