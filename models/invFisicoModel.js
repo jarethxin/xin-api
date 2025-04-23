@@ -1,4 +1,4 @@
-const { poolPromise, sql } = require("../config/db");
+const { poolPromise, sql } = require("../config/mssql");
 
 const getAndenesList = async (terminal_id) => {
     try {

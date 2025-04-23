@@ -29,3 +29,7 @@ const get_liquidaciones_by_no_operador = async (req, res) => {
           .json({ message: `Error al intentar obtener el listado de liquidaciones del operador no. ${no_operador}`, error: err.message });
   }
 };
+
+module.exports = {
+    get_liquidaciones_by_no_operador
+};

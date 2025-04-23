@@ -1,4 +1,4 @@
-const { poolPromise, sql } = require("../config/db");
+const { poolPromise, sql } = require("../config/mssql");
 
 // probablemente será necesario colocar "[xidb]." al principio de cada query o establecer bd base xidb
 
