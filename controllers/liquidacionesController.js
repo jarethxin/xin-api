@@ -6,31 +6,58 @@ const {
     getLiquidacionesListByNoOperador,
   } = require("../models/liquidacionesModel");
 
+// const get_liquidaciones_by_no_operador = async (req, res) => {
+//     const { no_operador } = req.query;
+
+//     try {
+//       if (!no_operador) {
+//           return res.status(404).json({ message: "Número de operador no especificado" });
+//       }
+
+//       if (no_operador === 0) {
+//         return res.status(404).json({ message: "Número de operador no válido" });
+//     }
+      
+//       const liquidaciones = await getLiquidacionesListByNoOperador(no_operador);
+      
+//       if (!liquidaciones || liquidaciones.length === 0) {
+//           return res.status(400).json({ message: "No se obtuvo el listado solicitado" });
+//       }
+
+//       return res.status(200).json(liquidaciones);
+//   } catch (err) {
+//       res
+//           .status(500)
+//           .json({ message: `Error al intentar obtener el listado de liquidaciones del operador no. ${no_operador}`, error: err.message });
+//   }
+// };
+
 const get_liquidaciones_by_no_operador = async (req, res) => {
-    const { no_operador } = req.query;
+  const { no_operador, page = 0, pageSize = 20 } = req.query;
 
-    try {
-      if (!no_operador) {
-          return res.status(404).json({ message: "Número de operador no especificado" });
-      }
+  const pageInt = parseInt(page);
+  const pageSizeInt = parseInt(pageSize);
+  const offset = pageInt * pageSizeInt;
 
-      if (no_operador === 0) {
-        return res.status(404).json({ message: "Número de operador no válido" });
+  try {
+    if (!no_operador || parseInt(no_operador) === 0) {
+      return res.status(404).json({ message: "Número de operador no válido o no especificado" });
     }
-      
-      const liquidaciones = await getLiquidacionesListByNoOperador(no_operador);
-      
-      if (!liquidaciones || liquidaciones.length === 0) {
-          return res.status(400).json({ message: "No se obtuvo el listado solicitado" });
-      }
+    
+    const liquidaciones = await getLiquidacionesListByNoOperador(no_operador, pageSizeInt, offset);
+    
+    if (!liquidaciones || liquidaciones.length === 0) {
+      return res.status(204).json({ message: "No se encontró información para el operador." });
+    }
 
-      return res.status(200).json(liquidaciones);
+    return res.status(200).json(liquidaciones);
   } catch (err) {
-      res
-          .status(500)
-          .json({ message: `Error al intentar obtener el listado de liquidaciones del operador no. ${no_operador}`, error: err.message });
-  }
-};
+      return res.status(500).json({
+        message: `Error al intentar obtener el listado de liquidaciones del operador no. ${no_operador}`,
+        error: err.message
+      });
+    }
+  };
 
 const get_liquidacion_pdf_by_operador_and_liquidacion = async (req, res) => {
   const { noOperador, folioLiquidacion } = req.params;
@@ -49,7 +76,7 @@ const get_liquidacion_pdf_by_operador_and_liquidacion = async (req, res) => {
   } else {
     res.status(404).json({ message: 'Archivo PDF no encontrado' });
   }
-}
+};
 
 module.exports = {
     get_liquidaciones_by_no_operador,
