@@ -4,6 +4,6 @@ const router = express.Router();
 
 router.get('/operador', get_liquidaciones_by_no_operador);
 
-router.get('/:noOperador/pdf/:folioLiquidacion', get_liquidacion_pdf_by_operador_and_liquidacion)
+router.get('/:noOperador/pdf/:folioLiquidacion', get_liquidacion_pdf_by_operador_and_liquidacion);
 
 module.exports = router;

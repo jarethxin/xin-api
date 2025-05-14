@@ -47,7 +47,7 @@ const get_liquidaciones_by_no_operador = async (req, res) => {
     const liquidaciones = await getLiquidacionesListByNoOperador(no_operador, pageSizeInt, offset);
     
     if (!liquidaciones || liquidaciones.length === 0) {
-      return res.status(204).json({ message: "No se encontró información para el operador." });
+      return res.status(204).json({ message: "No se encontró información para el operador" });
     }
 
     return res.status(200).json(liquidaciones);
