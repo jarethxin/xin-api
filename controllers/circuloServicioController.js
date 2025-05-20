@@ -1,4 +1,4 @@
-const { getViajeActivoDataByNoOperador } = require("../models/circuloServicioModel");
+const { getViajeActivoDataByNoOperador, getUbicacionDestinoDataByFolioViaje } = require("../models/circuloServicioModel");
 
 const get_viaje_activo_data_by_no_operador = async (req, res) => {
     const { no_operador } = req.query;
@@ -24,6 +24,31 @@ const get_viaje_activo_data_by_no_operador = async (req, res) => {
     }
 };
 
+const get_ubicacion_destino_data_by_folio_viaje = async (req, res) => {
+    const { no_viaje } = req.query;
+
+    try {
+        if (!no_viaje || parseInt(no_viaje) === 0) {
+            return res.status(404).json({ message: "Número de viaje no válido o no especificado" });
+        }
+
+        const destinoData = await getUbicacionDestinoDataByFolioViaje(no_viaje);
+
+        if (!destinoData) {
+            return res.status(204).json({ message: "No se encontró información de la ubicación destino" });
+        }
+
+        if (!destinoData || destinoData.length === 0) {
+            return res.status(200).json(null);
+        }
+
+        return res.status(200).json(destinoData[0]);
+    } catch (err) {
+        return res.status(500).json({ message: `Error al intentar obtener las coordenadas de ubicación destino del viaje activo no. ${no_viaje}`, error: err.message });
+    }
+};
+
 module.exports = {
-    get_viaje_activo_data_by_no_operador
+    get_viaje_activo_data_by_no_operador,
+    get_ubicacion_destino_data_by_folio_viaje
 };

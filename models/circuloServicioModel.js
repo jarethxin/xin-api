@@ -38,6 +38,41 @@ const getViajeActivoDataByNoOperador = async (no_operador) => {
     }
 };
 
+const getUbicacionDestinoDataByFolioViaje = async (no_viaje) => {
+    const SQL = `
+        SELECT 
+        lt.folio AS lt_folio
+        , lts.operator_id AS lts_operator_id
+        , lts.destination_id AS lts_destination_id
+        , stops.name AS stops_name
+        , ST_X(stops.center) AS stops_latitude
+        , ST_Y(stops.center) AS stops_longitude
+        FROM local_tickets lt
+        LEFT JOIN local_ticket_shipments lts ON lt.id = lts.local_ticket_id
+        LEFT JOIN local_route_versions lrv ON lt.local_route_version_id = lrv.id
+        LEFT JOIN (
+        	SELECT id, name, center, 'BaseStop' AS stop_type FROM base_stops WHERE deleted_at IS NULL
+        	UNION ALL
+        	SELECT id, name, center, 'SharedStop' AS stop_type FROM shared_stops WHERE deleted_at IS NULL
+        ) AS stops ON stops.id = lrv.destination_id AND stops.stop_type = lrv.destination_type
+        WHERE lt.deleted_at IS NULL
+        AND lt.replacement = false
+        AND lt.status = 0
+        AND lt.folio = $1
+        ORDER BY lt.id DESC
+        LIMIT 1;
+    `;
+
+    try {
+        const { rows } = await pgPool.query(SQL, [no_viaje]);
+        return rows;
+        } catch (error) {
+        console.error("Error al obtener coordenadas de ubicación destino:", error);
+        throw error;
+    }
+};
+
 module.exports = {
-  getViajeActivoDataByNoOperador
+  getViajeActivoDataByNoOperador,
+  getUbicacionDestinoDataByFolioViaje
 };
