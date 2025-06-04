@@ -1,4 +1,4 @@
-const { getViajeActivoDataByNoOperador, getUbicacionDestinoDataByFolioViaje } = require("../models/circuloServicioModel");
+const { getViajeActivoDataByNoOperador, getUbicacionDestinoDataByFolioViaje, getHorariosEstacionesByIdViaje } = require("../models/circuloServicioModel");
 
 const get_viaje_activo_data_by_no_operador = async (req, res) => {
     const { no_operador } = req.query;
@@ -48,7 +48,32 @@ const get_ubicacion_destino_data_by_folio_viaje = async (req, res) => {
     }
 };
 
+const get_horarios_estaciones_by_id_viaje = async (req, res) => {
+    const { local_ticket_id } = req.query;
+
+    try {
+        if (!local_ticket_id || parseInt(local_ticket_id) === 0) {
+            return res.status(404).json({ message: "Id de viaje no válido o no especificado" });
+        }
+
+        const horariosEstaciones = await getHorariosEstacionesByIdViaje(local_ticket_id);
+
+        if (!horariosEstaciones) {
+            return res.status(204).json({ message: "No se encontró información sobre el viaje especificado" });
+        }
+
+        if (!horariosEstaciones || horariosEstaciones.length === 0) {
+            return res.status(200).json(null);
+        }
+
+        return res.status(200).json(horariosEstaciones[0]);
+    } catch (err) {
+        return res.status(500).json({ message: `Error al intentar obtener los horarios registrados para el viaje con id: ${local_ticket_id}`, error: err.message });
+    }
+};
+
 module.exports = {
     get_viaje_activo_data_by_no_operador,
-    get_ubicacion_destino_data_by_folio_viaje
+    get_ubicacion_destino_data_by_folio_viaje,
+    get_horarios_estaciones_by_id_viaje
 };

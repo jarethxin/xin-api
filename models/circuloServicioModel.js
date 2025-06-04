@@ -72,7 +72,42 @@ const getUbicacionDestinoDataByFolioViaje = async (no_viaje) => {
     }
 };
 
+const getHorariosEstacionesByIdViaje = async (id) => {
+    const SQL = `
+        SELECT
+          id AS local_ticket_shipment_id
+        , local_ticket_id
+        -- , route_type
+        -- , completed
+        -- , local_ticket_shipments.foreign
+        -- , operation_type
+        -- , operation_department_id
+        , origin_entrance AS origen_entrada
+        , exit AS origen_salida
+        , modulation_entrance AS modulacion_entrada
+        , modulation_exit AS modulacion_salida
+        , us_entrance AS us_entrada
+        , us_exit AS us_salida
+        , mx_entrance AS mx_entrada
+        , mx_exit AS mx_salida
+        , destination_entrance AS destino_entrada
+        , destination_exit AS destino_salida
+        FROM public.local_ticket_shipments
+        WHERE local_ticket_id = $1
+        ORDER BY id DESC;
+    `;
+
+    try {
+        const { rows } = await pgPool.query(SQL, [id]);
+        return rows;
+        } catch (error) {
+        console.error("Error al obtener los horarios del viaje especificado:", error);
+        throw error;
+    }
+};
+
 module.exports = {
   getViajeActivoDataByNoOperador,
-  getUbicacionDestinoDataByFolioViaje
+  getUbicacionDestinoDataByFolioViaje,
+  getHorariosEstacionesByIdViaje
 };
