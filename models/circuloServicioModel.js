@@ -133,12 +133,12 @@ const getCoordinadorByIdentificadorUnidad = async (unidad) => {
         SELECT
         e.full_name AS coordinador_nombre,
         e.mail AS coordinador_correo
-        FROM local_tickets lt
-        LEFT JOIN local_ticket_shipments lts ON lt.id = lts.local_ticket_id
-        LEFT JOIN vehicles v ON lts.vehicle_id = v.id
+        FROM vehicles v
         LEFT JOIN fleet_coordinators fc ON v.fleet_coordinator_id = fc.id
         LEFT JOIN employees e ON fc.employee_id = e.id
-        WHERE lt.id = $1;
+        WHERE v.deleted_at IS NULL
+        AND v.active = true
+        AND v.identifier = $1;
     `;
 
     try {
