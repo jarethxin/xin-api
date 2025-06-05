@@ -1,4 +1,4 @@
-const { getViajeActivoDataByNoOperador, getUbicacionDestinoDataByFolioViaje, getHorariosEstacionesByIdViaje } = require("../models/circuloServicioModel");
+const { getViajeActivoDataByNoOperador, getUbicacionDestinoDataByFolioViaje, getHorariosEstacionesByIdViaje, getViajeDataByIdViaje, getCoordinadorByIdentificadorUnidad } = require("../models/circuloServicioModel");
 require("dotenv").config();
 const validator = require('validator');
 
@@ -87,27 +87,27 @@ const notify_horario_pendiente_para_finalizar_viaje = async (req, res) => {
         if (viajeResult.rowCount === 0) {
             return res.status(404).json({ message: "Datos de viaje no encontrados" });
         }
-        const { viaje_numero, viaje_operador_numero, viaje_operador_nombre, viaje_unidad } = viajeResult.rows[0];
-
+        const { viaje_numero, viaje_operador_numero, viaje_operador_nombre, viaje_unidad } = viajeResult[0];
+        
         // obtener datos de coordinador de unidad/operador
         const coordinadorResult = await getCoordinadorByIdentificadorUnidad(viaje_unidad);
         if (coordinadorResult.rowCount === 0) {
             return res.status(404).json({ message: "Datos de coordinador no encontrados" });
         }
-        const { coordinador_nombre, coordinador_correo } = coordinadorResult.rows[0];
-
+        const { coordinador_nombre, coordinador_correo } = coordinadorResult[0];
+        
         // validar correo de coordinador
         if (!validator.isEmail(coordinador_correo)) {
             return res.status(400).json({ message: "El correo del coordinador no es válido" });
         }
-
+        
         // obtener link directo al viaje
         const tripBaseUrl = process.env.DAT_TRIP_BASE_URL;
         if (!tripBaseUrl) {
             return res.status(500).json({ message: "La URL base para el viaje no está definida en las variables de entorno" });
         }
         const viaje_url = tripBaseUrl.replace('{id}', local_ticket_id);
-
+        
         // enviar correo
         await sendEmail({
             // to: coordinador_correo,
