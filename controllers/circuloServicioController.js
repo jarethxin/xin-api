@@ -111,8 +111,7 @@ const notify_horario_pendiente_para_finalizar_viaje = async (req, res) => {
         
         // enviar correo
         await sendEmail({
-            // to: coordinador_correo,
-            to: "jarethr@xpressinternacional.com",
+            to: coordinador_correo,
             subject: `Viaje no puede finalizarse por falta de captura de horarios`,
             html: `
             <p>¡Hola, <strong>${coordinador_nombre}</strong>!</p>
