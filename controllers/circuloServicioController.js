@@ -72,8 +72,23 @@ const get_horarios_estaciones_by_id_viaje = async (req, res) => {
     }
 };
 
+const notify_horario_pendiente_para_finalizar_viaje = async (req, res) => {
+    const { local_ticket_id } = req.query;
+
+    try {
+        if (!local_ticket_id || parseInt(local_ticket_id) === 0) {
+            return res.status(404).json({ message: "Id de viaje no válido o no especificado" });
+        }
+
+        
+    } catch (err) {
+        return res.status(500).json({ message: `Error al intentar enviar la notificación para el viaje con id: ${local_ticket_id}`, error: err.message });
+    }
+};
+
 module.exports = {
     get_viaje_activo_data_by_no_operador,
     get_ubicacion_destino_data_by_folio_viaje,
-    get_horarios_estaciones_by_id_viaje
+    get_horarios_estaciones_by_id_viaje,
+    notify_horario_pendiente_para_finalizar_viaje
 };

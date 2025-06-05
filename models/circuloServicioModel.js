@@ -78,7 +78,7 @@ const getHorariosEstacionesByIdViaje = async (id) => {
           id AS local_ticket_shipment_id
         , local_ticket_id
         -- , route_type
-        -- , completed
+        , completed
         -- , local_ticket_shipments.foreign
         -- , operation_type
         -- , operation_department_id
