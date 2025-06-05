@@ -106,8 +106,54 @@ const getHorariosEstacionesByIdViaje = async (id) => {
     }
 };
 
+const getViajeDataByIdViaje = async (local_ticket_id) => {
+    const SQL = `
+        SELECT lt.folio AS viaje_numero
+        , e.employee_number AS viaje_operador_numero
+        , e.full_name AS viaje_operador_nombre
+        , v.identifier AS viaje_unidad
+        FROM local_tickets lt
+        LEFT JOIN local_ticket_shipments lts ON lt.id = lts.local_ticket_id
+        LEFT JOIN employees e ON lts.operator_id = e.id
+        LEFT JOIN vehicles v ON lts.vehicle_id = v.id
+        WHERE lt.id = $1;
+    `;
+
+    try {
+        const { rows } = await pgPool.query(SQL, [local_ticket_id]);
+        return rows;
+        } catch (error) {
+        console.error("Error al obtener los datos del viaje:", error);
+        throw error;
+    }
+};
+
+const getCoordinadorByIdentificadorUnidad = async (unidad) => {
+    const SQL = `
+        SELECT
+        e.full_name AS coordinador_nombre,
+        e.mail AS coordinador_correo
+        FROM local_tickets lt
+        LEFT JOIN local_ticket_shipments lts ON lt.id = lts.local_ticket_id
+        LEFT JOIN vehicles v ON lts.vehicle_id = v.id
+        LEFT JOIN fleet_coordinators fc ON v.fleet_coordinator_id = fc.id
+        LEFT JOIN employees e ON fc.employee_id = e.id
+        WHERE lt.id = $1;
+    `;
+
+    try {
+        const { rows } = await pgPool.query(SQL, [unidad]);
+        return rows;
+        } catch (error) {
+        console.error("Error al obtener los datos del coordinador:", error);
+        throw error;
+    }
+};
+
 module.exports = {
   getViajeActivoDataByNoOperador,
   getUbicacionDestinoDataByFolioViaje,
-  getHorariosEstacionesByIdViaje
+  getHorariosEstacionesByIdViaje,
+  getViajeDataByIdViaje,
+  getCoordinadorByIdentificadorUnidad
 };

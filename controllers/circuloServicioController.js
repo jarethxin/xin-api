@@ -87,7 +87,7 @@ const notify_horario_pendiente_para_finalizar_viaje = async (req, res) => {
         if (viajeResult.rowCount === 0) {
             return res.status(404).json({ message: "Datos de viaje no encontrados" });
         }
-        const { viaje_numero, viaje_operador_numero, viaje_operador_nombre, viaje_unidad, viaje_remolque, viaje_destino } = viajeResult.rows[0];
+        const { viaje_numero, viaje_operador_numero, viaje_operador_nombre, viaje_unidad } = viajeResult.rows[0];
 
         // obtener datos de coordinador de unidad/operador
         const coordinadorResult = await getCoordinadorByIdentificadorUnidad(viaje_unidad);
@@ -110,7 +110,8 @@ const notify_horario_pendiente_para_finalizar_viaje = async (req, res) => {
 
         // enviar correo
         await sendEmail({
-            to: coordinador_correo,
+            // to: coordinador_correo,
+            to: "jarethr@xpressinternacional.com",
             subject: `Viaje no puede finalizarse por falta de captura de horarios`,
             html: `
             <p>Hola <strong>${coordinador_nombre}</strong>,</p>
