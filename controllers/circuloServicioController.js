@@ -80,7 +80,11 @@ const notify_horario_pendiente_para_finalizar_viaje = async (req, res) => {
             return res.status(404).json({ message: "Id de viaje no válido o no especificado" });
         }
 
-        
+        // obtener unidad asignada al viaje
+        // obtener coordinador de unidad/operador
+        // obtener correo de coordinador
+        // enviar correo
+        // devolver respuesta
     } catch (err) {
         return res.status(500).json({ message: `Error al intentar enviar la notificación para el viaje con id: ${local_ticket_id}`, error: err.message });
     }
