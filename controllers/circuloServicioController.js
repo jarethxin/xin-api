@@ -1,5 +1,5 @@
 const { getViajeActivoDataByNoOperador, getUbicacionDestinoDataByFolioViaje, getHorariosEstacionesByIdViaje, getViajeDataByIdViaje, getCoordinadorByIdentificadorUnidad } = require("../models/circuloServicioModel");
-const { sendEmail } = require("../helpers/sendEmail");
+const sendEmail = require("../helpers/sendEmail");
 require("dotenv").config();
 const validator = require('validator');
 
