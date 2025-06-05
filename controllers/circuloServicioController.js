@@ -115,8 +115,8 @@ const notify_horario_pendiente_para_finalizar_viaje = async (req, res) => {
             to: "jarethr@xpressinternacional.com",
             subject: `Viaje no puede finalizarse por falta de captura de horarios`,
             html: `
-            <p>Hola <strong>${coordinador_nombre}</strong>,</p>
-            <p>El viaje <strong>#${viaje_numero}</strong> de la unidad <strong>${viaje_unidad}</strong> / operador <strong>${viaje_operador_numero} ${viaje_operador_nombre}</strong> <span style="color: red;">no puede finalizarse</span> porque está pendiente de capturar al menos un horario de entrada/salida.</p>
+            <p>¡Hola, <strong>${coordinador_nombre}</strong>!</p>
+            <p>El viaje <strong>#${viaje_numero}</strong> de la unidad <strong>${viaje_unidad}</strong> con el operador <strong>${viaje_operador_numero} ${viaje_operador_nombre}</strong> <span style="color: red;">no puede finalizarse</span> porque está pendiente de capturar al menos un horario de entrada / salida.</p>
             <p>Por favor, verifícalo en el siguiente enlace:</p>
             <p><a href="${viaje_url}" style="display: inline-block; background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Validar ahora</a></p>
             <p>Gracias.</p>
