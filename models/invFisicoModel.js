@@ -76,9 +76,28 @@ const getAndenesList = async (terminal_id) => {
     }
   };
 
+    const createDetailInventarioSimplifiedV1TruckRegister = async (inventario_id, captura_manual, identificador, creado_por) => {
+    try {
+      const pool = await poolPromise;
+      const result = await pool
+        .request()
+        .input("inventario_id", sql.Int, inventario_id)
+        .input("captura_manual", sql.Bit, captura_manual)
+        .input("identificador", sql.NVarChar, identificador)
+        .input("creado_por", sql.Int, creado_por)
+        .query(
+          "EXECUTE [control_equipo].[sp_ins_inventario_detalle_simplified_tractor_v1] @inventario_id, @captura_manual, @identificador, @creado_por"
+        );
+      return result.recordset;
+    } catch (err) {
+      throw err;
+    }
+  };
+
   module.exports = {
     getAndenesList,
     createMainInventarioRegister,
     createDetailInventarioRegister,
-    createDetailInventarioSimplifiedV1Register
+    createDetailInventarioSimplifiedV1Register,
+    createDetailInventarioSimplifiedV1TruckRegister
   }

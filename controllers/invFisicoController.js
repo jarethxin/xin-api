@@ -5,6 +5,7 @@ const {
     createMainInventarioRegister,
     createDetailInventarioRegister,
     createDetailInventarioSimplifiedV1Register,
+    createDetailInventarioSimplifiedV1TruckRegister,
   } = require("../models/invFisicoModel");
 
   const get_andenes = async (req, res) => {
@@ -98,8 +99,30 @@ const {
     }
   };
 
+    const create_truck_inventory_detail = async (req, res) => {
+    const { inventario_id, captura_manual, identificador, creado_por } = req.body;
+    
+    try {
+        if (!inventario_id) return res.status(400).json({ message: "Id principal de inventario no especificado" });
+        if (captura_manual === null) return res.status(400).json({ message: "No se ha especificado si se trata de una captura manual" });
+        if (!identificador) return res.status(400).json({ message: "Identificador de unidad no especificada" });
+        if (!creado_por) return res.status(400).json({ message: "Usuario no especificado" });
+        
+        const inventory_detail_id = await createDetailInventarioSimplifiedV1TruckRegister(inventario_id, captura_manual, identificador, creado_por);
+        
+        if (!inventory_detail_id) return res.status(400).json({ message: "No se ha podido generar el registro individual detallado" });
+        
+        return res.status(200).json(inventory_detail_id);
+    } catch (err) {
+        res
+            .status(500)
+            .json({ message: "Error al intentar generar un registro individual detallado", error: err.message });
+    }
+  };
+
   module.exports = {
     get_andenes,
     create_inventory,
-    create_inventory_detail
+    create_inventory_detail,
+    create_truck_inventory_detail
   };
