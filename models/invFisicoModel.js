@@ -13,7 +13,7 @@ const getAndenesList = async (terminal_id) => {
     }
   };
 
-  const createMainInventarioRegister = async (empresa_id, terminal_id, observaciones, creado_por) => {
+  const createMainInventarioRegister = async (empresa_id, terminal_id, observaciones, creado_por, tipo_id) => {
     try {
       const pool = await poolPromise;
       const result = await pool
@@ -22,8 +22,9 @@ const getAndenesList = async (terminal_id) => {
         .input("terminal_id", sql.Int, terminal_id)
         .input("observaciones", sql.NVarChar, observaciones)
         .input("creado_por", sql.Int, creado_por)
+        .input("tipo_id", sql.Int, tipo_id)
         .query(
-          "EXECUTE [control_equipo].[sp_ins_inventario_general] @empresa_id, @terminal_id, @observaciones, @creado_por"
+          "EXECUTE [control_equipo].[sp_ins_inventario_general] @empresa_id, @terminal_id, @observaciones, @creado_por, @tipo_id"
         );
       return result.recordset;
     } catch (err) {

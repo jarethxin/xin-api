@@ -31,14 +31,14 @@ const {
   };
 
   const create_inventory = async (req, res) => {
-    const { empresa_id, terminal_id, observaciones, creado_por } = req.body;
+    const { empresa_id, terminal_id, observaciones, creado_por, tipo_id } = req.body;
 
     try {
         if (!empresa_id) return res.status(400).json({ message: "Empresa no especificada" });
         if (!terminal_id) return res.status(400).json({ message: "Terminal no especificada" });
         if (!creado_por) return res.status(400).json({ message: "Usuario no especificado" });
         
-        const inventory_id = await createMainInventarioRegister(empresa_id, terminal_id, observaciones, creado_por);
+        const inventory_id = await createMainInventarioRegister(empresa_id, terminal_id, observaciones, creado_por, tipo_id);
         
         if (!inventory_id) return res.status(400).json({ message: "No se ha podido generar el registro principal del inventario" });
 
